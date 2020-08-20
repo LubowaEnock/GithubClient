@@ -2,7 +2,9 @@ package com.lubowa.githubclient;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -12,15 +14,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
-    private ListView myList;
+public class MainActivity extends AppCompatActivity implements MainActivityView.OnGitHubRepoClickListener {
     private String[] repos;
+    private MainActivityView mainActivityView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        myList = (ListView) findViewById(R.id.mylist);
+        mainActivityView = new MainActivityView(LayoutInflater.from(this), null);
+        setContentView(mainActivityView.getRootView());
+        mainActivityView.registerListener(this);
+
         repos = new String[]{"one", "two","three","four"};
         //myList.setAdapter(new CustomListAdapter(this,repos));
 
@@ -36,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
                         List<GitHubRepo> repositories = response.body();
-
-                        myList.setAdapter(new CustomListAdapter(MainActivity.this, repositories));
+                        mainActivityView.setAdapter(repositories);
                     }
 
                     @Override
@@ -46,5 +49,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+    }
+
+    @Override
+    public void onGitHubRepoClicked(GitHubRepo repo) {
+        Toast.makeText(this,repo.getTitle(),Toast.LENGTH_SHORT).show();
     }
 }
