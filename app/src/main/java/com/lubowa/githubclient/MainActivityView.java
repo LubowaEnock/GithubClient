@@ -1,6 +1,5 @@
 package com.lubowa.githubclient;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +9,13 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivityView implements CustomListAdapter.OnGitHubRepoClickListener{
+public class MainActivityView implements ListAdapter.OnRepositoryClickedAdapter{
     private View rootView;
     private ListView myList;
-    private List<OnGitHubRepoClickListener> listeners= new ArrayList<>(1);
+    private List<OnRepositoryClickedView> listeners= new ArrayList<>(1);
 
-    public interface OnGitHubRepoClickListener{
-        void onGitHubRepoClicked(GitHubRepo repo);
+    public interface OnRepositoryClickedView{
+        void onRepositoryClicked(Repository repo);
     }
 
     public MainActivityView(LayoutInflater inflater, ViewGroup parent){
@@ -24,18 +23,18 @@ public class MainActivityView implements CustomListAdapter.OnGitHubRepoClickList
         myList = (ListView) findViewById(R.id.mylist);
     }
 
-    public void registerListener(OnGitHubRepoClickListener listener){
+    public void registerListener(OnRepositoryClickedView listener){
         listeners.add(listener);
     }
 
-    public void unRegisterListenser(OnGitHubRepoClickListener listener){
+    public void unRegisterListenser(OnRepositoryClickedView listener){
         listeners.remove(listener);
     }
 
 
 
-    public void setAdapter(List<GitHubRepo> repositories) {
-        myList.setAdapter(new CustomListAdapter(getContext(), repositories, this));
+    public void setAdapter(List<Repository> repositories) {
+        myList.setAdapter(new ListAdapter(getContext(), repositories, this));
     }
 
     private Context getContext() {
@@ -51,9 +50,9 @@ public class MainActivityView implements CustomListAdapter.OnGitHubRepoClickList
     }
 
     @Override
-    public void onGitHubRepoClicked(GitHubRepo repo) {
-        for(OnGitHubRepoClickListener listener:listeners){
-            listener.onGitHubRepoClicked(repo);
+    public void OnRepositoryClicked(Repository repo) {
+        for(OnRepositoryClickedView listener:listeners){
+            listener.onRepositoryClicked(repo);
         }
     }
 }

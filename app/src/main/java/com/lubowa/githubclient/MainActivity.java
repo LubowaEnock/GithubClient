@@ -3,7 +3,6 @@ package com.lubowa.githubclient;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView.OnGitHubRepoClickListener {
+public class MainActivity extends AppCompatActivity implements MainActivityView.OnRepositoryClickedView {
     private String[] repos;
     private MainActivityView mainActivityView;
 
@@ -33,18 +32,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
 
         Retrofit retrofit = builder.build();
 
-        MyGitHubClient myGitHubClient = retrofit.create(MyGitHubClient.class);
-        Call<List<GitHubRepo>> call = myGitHubClient.userRepos();
+        API API = retrofit.create(API.class);
+        Call<List<Repository>> call = API.userRepos();
         call.enqueue(
-                new Callback<List<GitHubRepo>>() {
+                new Callback<List<Repository>>() {
                     @Override
-                    public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
-                        List<GitHubRepo> repositories = response.body();
+                    public void onResponse(Call<List<Repository>> call, Response<List<Repository>> response) {
+                        List<Repository> repositories = response.body();
                         mainActivityView.setAdapter(repositories);
                     }
 
                     @Override
-                    public void onFailure(Call<List<GitHubRepo>> call, Throwable t) {
+                    public void onFailure(Call<List<Repository>> call, Throwable t) {
 
                     }
                 }
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
     }
 
     @Override
-    public void onGitHubRepoClicked(GitHubRepo repo) {
+    public void onRepositoryClicked(Repository repo) {
         Toast.makeText(this,repo.getTitle(),Toast.LENGTH_SHORT).show();
     }
 }

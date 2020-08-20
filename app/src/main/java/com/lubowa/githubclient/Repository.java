@@ -1,9 +1,9 @@
 package com.lubowa.githubclient;
 
-class GitHubRepo {
+class Repository {
     private String title, userId, id, body;
 
-    public GitHubRepo(String title, String userId, String id, String body) {
+    public Repository(String title, String userId, String id, String body) {
         this.title = title;
         this.userId = userId;
         this.id = id;
