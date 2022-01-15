@@ -1,2 +1,2 @@
 # GithubClient
-An simple impementation of Retrofit in an android client that fetches information from Github public API. 
+An simple impementation of Retrofit for demonstration purpose. It fectches repositories from Github's public API and fills them into a list view
